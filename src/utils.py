@@ -1,6 +1,6 @@
 from datetime import datetime
 from operator import itemgetter
-from constants import DATA
+from src.constants import DATA
 import json
 
 
@@ -21,14 +21,6 @@ def _sorted_by_date():
     return executed_transactions
 
 
-def _last_operations(count):
-    data = _sorted_by_date()
-    last_operations_list = []
-    for i in range(count):
-        last_operations_list.append(data[i])
-    return last_operations_list
-
-
 def _hide_digits(requisites):
     requisites_digits = requisites.split(' ')[-1]
     if len(requisites_digits) == 20:
@@ -41,10 +33,13 @@ def _hide_digits(requisites):
         return f'{card_name} {requisites_digits[:4]} {requisites_digits[4:6]}** **** {requisites_digits[12:]}'
 
 
-def format_operations(count_operations):
-    data = _last_operations(count_operations)
+def format_last_operations(count_operations):
+    data = _sorted_by_date()
+    last_operations = []
     data_new = []
-    for item in data:
+    for i in range(count_operations):
+        last_operations.append(data[i])
+    for item in last_operations:
         if 'from' in item:
             item['from'] = _hide_digits(item['from'])
         item['to'] = _hide_digits(item['to'])
